@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const students = require("./models/students");
 const studentsrouter = require("./routers/studentsrouter");
+const studentrouter = require("./routers/studentrouter");
 const app = express();
 
 app.use(bodyParser.json());
@@ -12,6 +13,8 @@ app.use(bodyParser.json());
 //   next();
 // });
 app.use("/students", studentsrouter);
+app.use("/student", studentrouter);
+
 app.get("/", (req, res) => {
   res.send("Hello");
 });

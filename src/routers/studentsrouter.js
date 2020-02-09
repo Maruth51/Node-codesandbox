@@ -1,5 +1,5 @@
 const express = require("express");
-const students = require("./models/students");
+const students = require("../models/students");
 const studentrouter = express.Router();
 
 studentrouter
@@ -7,7 +7,7 @@ studentrouter
     res.status(200).json({ students });
   })
 
-  .post("/s", (req, res) => {
+  .post("/", (req, res) => {
     if (req.body.id && req.body.firstName) {
       students.push(req.body);
       res.status(200).json({ message: "Student created successfully" });

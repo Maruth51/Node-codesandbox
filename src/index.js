@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const students = require("./models/Students");
+const students = require("./models/students");
 const studentsrouter = require("./routers/studentsrouter");
 const app = express();
 

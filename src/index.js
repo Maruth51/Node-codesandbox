@@ -1,9 +1,12 @@
-var http = require("http");
+const fileWritesysten = (text, completeCallback) => {
+  setTimeout(() => {
+    console.log("file written sucesdfully");
+    completeCallback("success");
+  });
+};
 
-//create a server object:
-http
-  .createServer(function(req, res) {
-    res.write("HI Hello World!!!!"); //write a response to the client
-    res.end(); //end the response
-  })
-  .listen(8080); //the server object listens on port 8080
+console.log("Hello");
+const textTowrite = "";
+fileWritesysten("index j file name", status => {
+  console.log(`asych function compleyted ${status}`);
+});

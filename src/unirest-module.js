@@ -11,7 +11,7 @@ const networkCallback = () => {
 
 networkCallback()
   .then(data => {
-    console.log(data);
+    console.log(data.body);
   })
   .catch(error => {
     console.log("error occured");

@@ -3,8 +3,24 @@ const bodyParser = require("body-parser");
 const students = require("./models/students");
 const studentsrouter = require("./routers/studentsrouter");
 const studentrouter = require("./routers/studentrouter");
+const path = require("path");
+const expressHbs = require("express-handlebars");
+const formatIndex = require("./views/helpers/formatIndex");
+
 const app = express();
 
+const hbs = expressHbs.create({
+  extname: ".hbs",
+  layoutsDir: path.join(__dirname, "./views/layouts"),
+  partialsDir: path.join(__dirname, "./views/partials"),
+  helpers: {
+    formatIndex
+  }
+});
+
+app.engine(".hbs", hbs.engine);
+app.set("view engine", ".hbs");
+app.set("views", path.join(__dirname, "./views"));
 app.use(bodyParser.json());
 
 // app.use((req, res, next) => {
@@ -16,10 +32,13 @@ app.use("/students", studentsrouter);
 app.use("/student", studentrouter);
 
 app.get("/", (req, res) => {
-  res.send("Hello");
+  res.render("home", {
+    layout: "hero",
+    pageTitle: "Home Page"
+  });
 });
 
-app.get("/students", (req, res) => {
+app.get("/web/students", (req, res) => {
   /**
    * Express is smart enough to figure out the
    * response header's MIME type
@@ -38,7 +57,11 @@ app.get("/students", (req, res) => {
    * It's a good practice to be explicit
    * of the status codes and response types
    */
-  res.status(200).json({ students });
+  res.render("students", {
+    layout: "navigationbar",
+    pageTitle: "Students Page",
+    students
+  });
 });
 
 app.post("/students", (req, res) => {

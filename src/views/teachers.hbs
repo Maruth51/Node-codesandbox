@@ -1,0 +1,24 @@
+<div class="container">
+  <h1>Teachers Details</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Emp No</th>
+        <th scope="col">Name</th>
+        <th scope="col">Designation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each teachers}}
+      <tr>
+        <th scope="row">{{formatIndex @index}}</th>
+        <td>{{this.empNo}}</td>
+        <td> <a class="nav-link" href={{genLink this.empNo}}>{{this.name}}</a>
+        </td>
+        <td>{{this.designation}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

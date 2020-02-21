@@ -1,14 +1,7 @@
-const axios = require("axios");
+const axios = require("axios").default;
 
 const getteachers = url => {
-  axios
-    .get(url)
-    .then(response => {
-      return response;
-    })
-    .catch(error => {
-      return false;
-    });
+  return axios.get(url);
 };
 
 module.exports = getteachers;

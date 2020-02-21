@@ -4,9 +4,10 @@ const students = require("./models/students");
 const studentsrouter = require("./routers/studentsrouter");
 const studentrouter = require("./routers/studentrouter");
 const path = require("path");
+const getTeachers = require("./retriveData");
 const expressHbs = require("express-handlebars");
 const formatIndex = require("./views/helpers/formatIndex");
-
+const genLink = require("./views/helpers/genLink");
 const app = express();
 
 const hbs = expressHbs.create({
@@ -37,7 +38,24 @@ app.get("/", (req, res) => {
     pageTitle: "Home Page"
   });
 });
-app.get("/web/teachers", (req, res) => {});
+app.get("/web/teachers", (req, res) => {
+  getTeachers("https://9y9k5.sse.codesandbox.io/teachers")
+    .then(response => {
+      const teachersData = response.data.teacher;
+      console.log(response.data);
+      console.log(response.data.teacher);
+      res.render("teachers", {
+        layout: "navigationbar",
+        teachers: teachersData,
+        pageTitle: "Teachers",
+        helpers: { genLink }
+      });
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(400);
+    });
+});
 
 app.get("/web/students", (req, res) => {
   /**

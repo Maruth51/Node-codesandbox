@@ -14,9 +14,9 @@
       <tr>
         <th scope="row">{{formatIndex @index}}</th>
         <td>{{this.empNo}}</td>
-        <td> <a class="nav-link" href={{genLink this.empNo}}>{{this.name}}</a>
+        <td> <a class="nav-link" href={{genLink this.empNo}}>{{toTitlecase this.name}}</a>
         </td>
-        <td>{{this.designation}}</td>
+        <td>{{toTitlecase this.designation}}</td>
       </tr>
       {{/each}}
     </tbody>

@@ -16,10 +16,10 @@ const students = [
     id: 2,
     firstName: "Ram",
     lastName: "Kumar",
-    age: 16,
+    age: 21,
     gender: "male",
     scores: {
-      math: 90,
+      math: 78,
       english: 90,
       science: 90,
       tamil: 90
@@ -28,11 +28,11 @@ const students = [
   {
     id: 3,
     firstName: "Ravi",
-    lastName: "Kumar",
+    lastName: "Prakash",
     age: 16,
     gender: "male",
     scores: {
-      math: 90,
+      math: 56,
       english: 90,
       science: 90,
       tamil: 90

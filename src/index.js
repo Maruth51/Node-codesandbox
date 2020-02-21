@@ -37,6 +37,7 @@ app.get("/", (req, res) => {
     pageTitle: "Home Page"
   });
 });
+app.get("/web/teachers", (req, res) => {});
 
 app.get("/web/students", (req, res) => {
   /**

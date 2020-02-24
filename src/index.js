@@ -12,6 +12,7 @@ const expressHbs = require("express-handlebars");
 const formatIndex = require("./views/helpers/formatIndex");
 const genLink = require("./views/helpers/genLink");
 const toTitlecase = require("./views/helpers/toTitlecase");
+const ifEqual = require("./views/helpers/ifEqual");
 const app = express();
 
 const hbs = expressHbs.create({
@@ -19,14 +20,17 @@ const hbs = expressHbs.create({
   layoutsDir: path.join(__dirname, "./views/layouts"),
   partialsDir: path.join(__dirname, "./views/partials"),
   helpers: {
-    formatIndex
+    formatIndex,
+    ifEqual
   }
 });
 
 app.engine(".hbs", hbs.engine);
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, "./views"));
+
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // app.use((req, res, next) => {
 //   // res.send("Response from Middleware");
@@ -68,23 +72,30 @@ app.get("/web/students", (req, res) => {
   });
 });
 
-app.post("/students", (req, res) => {
-  if (req.body.id && req.body.firstName) {
-    students.push(req.body);
-    res.status(200).json({ message: "Student created successfully" });
-  } else {
-    res.status(400).send("Bad Request");
-  }
+app.get("/web/addStudents", (req, res) => {
+  res.render("addStudents", {
+    layout: "navigationbar",
+    studentID: students.length + 1
+  });
 });
 
-app.get("/student/:id", (req, res) => {
-  // const studentId = req.params.id;
-  const { id = "" } = req.params;
+app.get("/web/edit-student/:id", (req, res) => {
+  const { id } = req.params;
+  console.log("students", students);
+  console.log("id in parms " + id);
   const requiredStudent = students.find(student => {
-    if (parseInt(id) === student.id) return true;
+    if (parseInt(id, 10) === student.id) return true;
     else return false;
   });
-  res.status(200).json({ student: requiredStudent });
+  if (requiredStudent) {
+    res.render("addStudents", {
+      layout: "navigationbar",
+      pageTitle: "Edit Student",
+      student: requiredStudent,
+      mode: "edit",
+      studentID: requiredStudent.id
+    });
+  } else res.status(400).send("Requested Student not found");
 });
 
 // teachers API

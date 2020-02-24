@@ -1,0 +1,68 @@
+<form action="/student" id="add-student-form" method="POST" target="_blank">
+  <input type="hidden" name="id" value={{studentID}}>
+  <label for="fname">First name:</label>
+  <input type="text" id="fname" name="firstName" placeholder="First Name" value="{{student.firstName}}" required />
+  <br />
+  <label for="lname">Last name:</label>
+  <input type="text" id="lname" name="lastName" placeholder="Last Name" value="{{student.lastName}}" required />
+  <br />
+  <label for="age">Age:</label>
+  <input type="text" id="age" name="age" placeholder="Age" value="{{student.age}}" required />
+  <br />
+  <label for="gender">Gender:</label>
+  <input type="radio" id="gender-male" name="gender" checked="{{#if (ifEqual student.gender "male")}}true{{/if}}"
+    value="male" required />
+  <label for="gender-male">Male</label>
+  <input type="radio" id="gender-female" name="gender" {{#if (ifEqual student.gender "female")}}true{{/if}}
+    value="Female" required />
+  <label for="gender-female">Female</label><br />
+  <input type="submit" value="{{#if (ifEqual mode "edit")}}Edit Student{{else}}Add Student{{/if}}" />
+</form>
+<script>
+  const $addStudentForm = document.querySelector("#add-student-form");
+  $addStudentForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    let formDetailsJson = {};
+    // here we know form is being submitted
+    const studentFormDetails = new FormData($addStudentForm);
+    for (const fieldDetail of studentFormDetails.entries()) {
+      const [key, value] = fieldDetail;
+      formDetailsJson[key] = value;
+    }
+    let url, config;
+    console.log(formDetailsJson);
+    if ("{{mode}}" === "edit") {
+      url = "/student/{{studentID}}"
+      config = {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formDetailsJson) // body data type must match "Content-Type" header
+      };
+
+    } else {
+      url = "/student"
+      config = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formDetailsJson) // body data type must match "Content-Type" header
+      };
+    }
+
+    fetch(url, config).then((response) => {
+      console.log(response)
+      if (response.ok) {
+        alert("Added Successfully")
+        return response.json()
+      }
+      else throw Error("Request Faild")
+    }).then(data => {
+      console.log(data)
+    }).catch(error => {
+      console.log(error)
+    })
+  });
+</script>

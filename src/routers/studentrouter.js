@@ -7,8 +7,9 @@ studentRouter
   .post("/", (req, res) => {
     if (req.body.id && req.body.firstName) {
       students.push(req.body);
-      res.status(200).json({ message: "Student created successfully" });
+      res.status(200).send("Student created successfully");
     } else {
+      console.log(req.body);
       res.status(400).send("Bad Request");
     }
   })
@@ -23,7 +24,7 @@ studentRouter
   })
   .patch("/:id", (req, res) => {
     const { id } = req.params;
-    const { firstName, lastName, age, gender, scores } = req.body;
+    //const { firstName, lastName, age, gender, scores } = req.body;
     let requiredStudentIndex;
     const requiredStudent = students.find((student, studentIndex) => {
       if (parseInt(id, 10) === student.id) {
@@ -41,7 +42,7 @@ studentRouter
       } = req.body;
 
       students[requiredStudentIndex] = {
-        id: req.params.id,
+        id: parseInt(req.params.id, 10),
         firstName,
         lastName,
         age,

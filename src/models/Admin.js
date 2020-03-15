@@ -37,14 +37,14 @@ const newAdmin = {
   password: "password!"
 };
 
-Admin.sync({ force: true })
-  .then(() => {
-    console.log("table created");
-    return Admin.create(newAdmin);
-  })
-  .then(result => {
-    console.log(result.get());
-  })
-  .catch(console.error);
+// Admin.sync({ force: false })
+//   .then(() => {
+//     console.log("table created");
+//     return Admin.create(newAdmin);
+//   })
+//   .then(result => {
+//     console.log(result.get());
+//   })
+//   .catch(console.error);
 
 module.exports = Admin;

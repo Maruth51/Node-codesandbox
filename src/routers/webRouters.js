@@ -107,12 +107,6 @@ webRouter
         console.log(error);
         res.status(400);
       });
-  })
-  .get("/admin/login", (req, res) => {
-    res.render("admin", {
-      layout: "hero",
-      pageTitle: "Admin Login"
-    });
   });
 
 module.exports = webRouter;

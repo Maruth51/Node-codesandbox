@@ -3,8 +3,8 @@ const bodyParser = require("body-parser");
 const students = require("./models/students");
 const studentsrouter = require("./routers/studentsrouter");
 const studentrouter = require("./routers/studentrouter");
+const adminRouter = require("./routers/adminRouter");
 const path = require("path");
-const getTeachers = require("./retriveData");
 const expressHbs = require("express-handlebars");
 
 //helpers
@@ -15,16 +15,19 @@ const toTitlecase = require("./views/helpers/toTitlecase");
 const ifEqual = require("./views/helpers/ifEqual");
 const app = express();
 
+const webRouter = require("./routers/webRouters");
 const hbs = expressHbs.create({
   extname: ".hbs",
   layoutsDir: path.join(__dirname, "./views/layouts"),
   partialsDir: path.join(__dirname, "./views/partials"),
   helpers: {
     formatIndex,
-    ifEqual
+    ifEqual,
+    toTitlecase,
+    genLink
   }
 });
-
+app.use("/web", webRouter);
 app.engine(".hbs", hbs.engine);
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, "./views"));
@@ -39,102 +42,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // });
 app.use("/students", studentsrouter);
 app.use("/student", studentrouter);
+app.use("/admin", adminRouter);
 
 app.get("/", (req, res) => {
   res.render("home", {
     layout: "hero",
     pageTitle: "Home Page"
   });
-});
-app.get("/web/students", (req, res) => {
-  /**
-   * Express is smart enough to figure out the
-   * response header's MIME type
-   */
-  // res.send(students);
-  // res.send("<h1>Hello</h1>")
-
-  /**
-   * Multiple properties of the same object of the express modules
-   * can be chained together
-   */
-  // res.status(200);
-  // res.json({students}); // These two statements can be chained together
-
-  /**
-   * It's a good practice to be explicit
-   * of the status codes and response types
-   */
-  res.render("students", {
-    layout: "navigationbar",
-    pageTitle: "Students Page",
-    students
-  });
-});
-
-app.get("/web/addStudents", (req, res) => {
-  res.render("addStudents", {
-    layout: "navigationbar",
-    studentID: students.length + 1
-  });
-});
-
-app.get("/web/edit-student/:id", (req, res) => {
-  const { id } = req.params;
-  console.log("students", students);
-  console.log("id in parms " + id);
-  const requiredStudent = students.find(student => {
-    if (parseInt(id, 10) === student.id) return true;
-    else return false;
-  });
-  if (requiredStudent) {
-    res.render("addStudents", {
-      layout: "navigationbar",
-      pageTitle: "Edit Student",
-      student: requiredStudent,
-      mode: "edit",
-      studentID: requiredStudent.id
-    });
-  } else res.status(400).send("Requested Student not found");
-});
-
-// teachers API
-app.get("/web/teachers", (req, res) => {
-  getTeachers("https://9y9k5.sse.codesandbox.io/teachers")
-    .then(response => {
-      const teachersData = response.data.teacher;
-      console.log(response.data);
-      console.log(response.data.teacher);
-      res.render("teachers", {
-        layout: "navigationbar",
-        teachers: teachersData,
-        pageTitle: "Teachers",
-        helpers: { genLink, toTitlecase }
-      });
-    })
-    .catch(error => {
-      console.log(error);
-      res.status(400);
-    });
-});
-
-app.get("/web/teacher/:id", (req, res) => {
-  const { id = "" } = req.params;
-  getTeachers("https://9y9k5.sse.codesandbox.io/teacher/" + id)
-    .then(response => {
-      const teacherData = response.data.requestedTeacher;
-      console.log(response.data);
-      res.render("teacherProfile", {
-        layout: "navigationbar",
-        teacher: teacherData,
-        pageTitle: "Teacher Profile",
-        helpers: { toTitlecase }
-      });
-    })
-    .catch(error => {
-      console.log(error);
-      res.status(400);
-    });
 });
 
 const server = app.listen(8080, () => {

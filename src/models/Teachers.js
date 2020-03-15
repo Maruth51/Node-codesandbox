@@ -33,20 +33,30 @@ const Teacher = classDB.define("Teacher", {
   }
 });
 
-Teacher.sync()
-  .then(() => {
-    console.log("table created");
-  })
-  .catch(err => {
-    console.error(err);
-  });
+const teacherSync = () => {
+  Teacher.sync()
+    .then(() => {
+      console.log("table created");
+    })
+    .catch(err => {
+      console.error(err);
+    });
 
-const newTeacher = {
-  firstName: "Barney",
-  lastName: "Mosssby",
-  emailID: "Bmossby@gmail.com",
-  class: "10",
-  subject: "Maths"
+  const newTeacher = {
+    firstName: "Barney",
+    lastName: "Mosssby",
+    emailID: "Bmossby@gmail.com",
+    class: "10",
+    subject: "Maths"
+  };
+
+  Teacher.create(newTeacher)
+    .then(res => {
+      console.log("data", res.get());
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 // Teacher.sync({ force: false })
 //   .then(() => {
@@ -67,11 +77,4 @@ const newTeacher = {
 //     console.log(teacherInstance.get());
 //   })
 //   .catch(console.error);
-
-Teacher.create(newTeacher)
-  .then(res => {
-    console.log("data", res.get());
-  })
-  .catch(err => {
-    console.log(err);
-  });
+module.exports = Teacher;

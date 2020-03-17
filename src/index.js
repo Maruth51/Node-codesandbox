@@ -2,8 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
-const { adminAuth } = require("./middlewares/adminAuth");
-const students = require("./models/students");
+const adminAuth = require("./middlewares/adminAuth");
+//const students = require("./models/students");
 const studentsrouter = require("./routers/studentsrouter");
 const studentrouter = require("./routers/studentrouter");
 const adminRouter = require("./routers/adminRouter");

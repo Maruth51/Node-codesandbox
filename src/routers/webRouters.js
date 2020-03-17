@@ -81,8 +81,7 @@ webRouter
         res.render("teacherProfile", {
           layout: "navigationbar",
           teacher: teacherData,
-          pageTitle: "Teacher Profile",
-          helpers: { toTitlecase }
+          pageTitle: "Teacher Profile"
         });
       })
       .catch(error => {

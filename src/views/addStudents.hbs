@@ -58,7 +58,10 @@
         alert("Added Successfully")
         return response.json()
       }
-      else throw Error("Request Faild")
+      else {
+        throw Error("Request Faild")
+        alert("Request Failed")
+      }
     }).then(data => {
       console.log(data)
     }).catch(error => {

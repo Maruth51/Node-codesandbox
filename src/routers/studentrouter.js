@@ -1,15 +1,28 @@
 const express = require("express");
-const students = require("../models/students");
+const studentModel = require("../models/studentModel");
 
 const studentRouter = express.Router();
 
 studentRouter
-  .post("/", (req, res) => {
-    if (req.body.id && req.body.firstName) {
-      students.push(req.body);
-      res.status(200).send("Student created successfully");
-    } else {
-      console.log(req.body);
+  .post("/", async (req, res) => {
+    try {
+      if (req.body.lastName && req.body.firstName) {
+        const { firstName, lastName, gender, age, teacherId = 1 } = req.body;
+        const newStudent = await studentModel.create({
+          firstName,
+          lastName,
+          gender,
+          age,
+          teacherId
+        });
+
+        res.status(200).send(newStudent.toJSON());
+      } else {
+        console.log(req.body);
+        res.status(400).send("Bad Request");
+      }
+    } catch (err) {
+      console.error(err);
       res.status(400).send("Bad Request");
     }
   })

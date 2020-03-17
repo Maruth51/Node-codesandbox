@@ -1,5 +1,6 @@
 const express = require("express");
 const studentModel = require("../models/studentModel");
+const teacherModel = require("../models/Teachers");
 const getTeachers = require("../retriveData");
 
 const webRouter = express.Router();
@@ -40,7 +41,7 @@ webRouter
   .get("/addStudents", (req, res) => {
     res.render("addStudents", {
       layout: "navigationbar",
-      studentID: students.length + 1
+      pageTitle: "Add Students"
     });
   })
   .get("/edit-student/:id", (req, res) => {
@@ -61,22 +62,18 @@ webRouter
       });
     } else res.status(400).send("Requested Student not found");
   })
-  .get("/teachers", (req, res) => {
-    getTeachers("https://9y9k5.sse.codesandbox.io/teachers")
-      .then(response => {
-        const teachersData = response.data.teacher;
-        console.log(response.data);
-        console.log(response.data.teacher);
-        res.render("teachers", {
-          layout: "navigationbar",
-          teachers: teachersData,
-          pageTitle: "Teachers"
-        });
-      })
-      .catch(error => {
-        console.log(error);
-        res.status(400);
+  .get("/teachers", async (req, res) => {
+    try {
+      const teachers = await teacherModel.findAll({ raw: true });
+      console.log(teachers);
+      res.render("teachers", {
+        layout: "navigationbar",
+        teachers,
+        pageTitle: "Teachers"
       });
+    } catch {
+      res.send("Error Page");
+    }
   })
   .get("/teacher/:id", (req, res) => {
     const { id = "" } = req.params;

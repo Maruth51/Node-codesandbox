@@ -44,8 +44,8 @@ app.use(cookieParser());
 //   next();
 // });
 app.use("/web", adminAuth, webRouter);
-app.use("/students", adminAuth, studentsrouter);
-app.use("/student", adminAuth, studentrouter);
+app.use("/students", studentsrouter);
+app.use("/student", studentrouter);
 app.use("/admin", adminRouter);
 
 app.get("/", (req, res) => {

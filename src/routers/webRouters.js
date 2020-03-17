@@ -1,11 +1,11 @@
 const express = require("express");
-const students = require("../models/students");
+const studentModel = require("../models/studentModel");
 const getTeachers = require("../retriveData");
 
 const webRouter = express.Router();
 
 webRouter
-  .get("/students", (req, res) => {
+  .get("/students", async (req, res) => {
     /**
      * Express is smart enough to figure out the
      * response header's MIME type
@@ -24,11 +24,17 @@ webRouter
      * It's a good practice to be explicit
      * of the status codes and response types
      */
-    res.render("students", {
-      layout: "navigationbar",
-      pageTitle: "Students Page",
-      students
-    });
+    try {
+      const students = await studentModel.findAll({ raw: true });
+      console.log(students);
+      res.render("students", {
+        layout: "navigationbar",
+        pageTitle: "Students Page",
+        students
+      });
+    } catch {
+      res.status(400).send("Some Error ocuured");
+    }
   })
 
   .get("/addStudents", (req, res) => {

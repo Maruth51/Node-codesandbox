@@ -46,15 +46,15 @@ const newStudent = {
   age: 14,
   teacherId: 1
 };
-
-Student.sync({ force: false })
-  .then(() => {
-    console.log("table created");
-    return Student.create(newStudent);
-  })
-  .then(result => {
-    console.log(result.get());
-  })
-  .catch(console.error);
-
+const syncStudent = () => {
+  Student.sync({ force: false })
+    .then(() => {
+      console.log("table created");
+      return Student.create(newStudent);
+    })
+    .then(result => {
+      console.log(result.get());
+    })
+    .catch(console.error);
+};
 module.exports = Student;

@@ -1,19 +1,30 @@
 const express = require("express");
-const students = require("../models/students");
-const studentrouter = express.Router();
+const student = require("../models/studentModel");
 
-studentrouter
+const studentsRouter = express.Router();
+
+studentsRouter
   .get("/", (req, res) => {
-    res.status(200).json({ students });
+    console.log("enterd students router");
+    student
+      .findAll()
+      .then(result => {
+        console.log("Db Results", result);
+        res.status(200).json(result);
+      })
+      .catch(err => {
+        console.error(err);
+        res.send("error occured");
+      });
   })
 
   .post("/", (req, res) => {
     if (req.body.id && req.body.firstName) {
-      students.push(req.body);
+      //students.push(req.body);
       res.status(200).json({ message: "Student created successfully" });
     } else {
       res.status(400).send("Bad Request");
     }
   });
 
-module.exports = studentrouter;
+module.exports = studentsRouter;
